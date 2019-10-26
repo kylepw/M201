@@ -13,7 +13,7 @@ use m201
 db.restaurants.createIndex({ "cuisine": 1, "address.street":1, "address.city": 1, "address.state": 1, "address.zipcode": 1 })
 
 // run a query that will use the new index
-db.restaurants.find({  cuisine: /Medi/, "address.zipcode": /6/   }).explain()
+db.restaurants.find({  cuisine: /^Medi/, "address.zipcode": /^6/   }).explain()
 
 // shutdown the server again
 use admin
@@ -21,7 +21,7 @@ db.shutdownServer()
 
 
 // on the primary, rerun the last query (doesn't use our index)
-db.restaurants.find({  cuisine: /Medi/, "address.zipcode": /6/   }).explain()
+db.restaurants.find({  cuisine: /^Medi/, "address.zipcode": /^6/   }).explain()
 
 // connect to our passive node
 db = connect("127.0.0.1:27002/m201")
@@ -30,4 +30,4 @@ db = connect("127.0.0.1:27002/m201")
 db.setSlaveOk()
 
 // confirm that we can still use the new index on the secondary
-db.restaurants.find({  cuisine: /Medi/, "address.zipcode": /6/   }).explain()
+db.restaurants.find({  cuisine: /^Medi/, "address.zipcode": /^6/   }).explain()
